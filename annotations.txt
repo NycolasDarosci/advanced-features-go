@@ -1,3 +1,76 @@
+Concurrency / Parallelism
+            VS
+Synchronous / Sequential
+
+x := 5
+x++
+fmt.Println(x)
+y := 5
+y++
+fmt.Println(y)
+
+CPU (central processing unit)
+    How optimize that sequential process?
+
+    CPU has a clock - how many instruction, computation
+        it can do per amout of time?
+
+    to optimize that sequential process:
+        - get a faster cpu or
+        - reduce the number of instructions;
+
+    how to speed up the program?
+        - make it concurrent
+
+        the x section does not depends on y and vice versa.
+        The sections (x, y) can be runned concurrently.
+
+Channel
+    channel is a type,
+    thread-safe queue,
+    that can be used to communicate between goroutines.
+
+    ch := make(chan int)
+    ch <- 42 // sending
+    x := <- ch // receiving
+
+    sending and receiving are blocking operations.
+        if the program is sending a value to a channel,
+        and there is no another go routine outside capable to read it,
+        the code will stop and wait on this go routine to read the value.
+
+        the same as receiving a value from a channel,
+        if there is no another go routine capable to send a value to the channel,
+        the code will stop and wait on this go routine to send a value.
+
+
+    Blocking and deadlocks
+        deadlock is when a group of goroutines are all blocking
+        so none of them can proceed.
+
+    Buffered channels
+        buffered channels are like normal channels,
+        but they can store up to n values.
+        If the buffer is full,
+        the sender will block until a receiver is available.
+        If the buffer is empty,
+        the receiver will block until a sender is available.
+
+Mutexes (mutual exclusion)
+    garantees that only one goroutine, or thread, access a shared resource.
+    locking mechanism to protect shared resources.
+    lock access to data, shared resource.
+
+    Prevents:
+        - race condition, two or more goroutine, processes,
+        read and write the same resource at the same time.
+
+    sync.RWMutex
+        - read-write mutex,
+        allows multiple readers,
+        help with performance if there is a read-intensive process.
+
+
 Context
 
 What is Context? (The Big Picture)
@@ -9,7 +82,7 @@ wasting valuable time, and consuming resources that could be better spent elsewh
 In Go, context is like a shared timer or a kill-switch.
 Its primary purpose is to prevent the waste of computational energy and time.
 When an operation takes longer than the value it produces—or when
-the caller simply cannot afford to wait any longer—context
+the caller simply cannot afford to wait any longer]##—context
 sends a signal across all running tasks saying: "Stop what you are doing, wrap up, and don't waste any more resources."
 
     func main() {
